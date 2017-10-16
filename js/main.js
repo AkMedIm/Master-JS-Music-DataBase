@@ -15,8 +15,24 @@
     });
   };
   this.getData = function(artist){
+
     var http= new XMLHttpRequest();
     var url = "https://itunes.apple.com/search?term=audioslave&entity=album";
+    var method = "GET";
+
+    http.open(method,url);
+    http.onreadystatechange = function(){
+
+      if(http.readyState === XMLHttpRequest.DONE && http.status === 200){
+
+        
+
+      }else if(http.status === XMLHttpRequest.DONE && http.status !== 200){
+        // something failed
+      }
+
+    };
+    http.send();
   };
   this.init();
 }) ();
