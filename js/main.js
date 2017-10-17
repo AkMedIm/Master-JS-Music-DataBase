@@ -10,14 +10,14 @@
       var value = document.querySelector("#input_search").value;
       form.reset();
 
-      getData(value);
+      getData(value.split(' ').join("+"));
 
     });
   };
   this.getData = function(artist){
 
     var http= new XMLHttpRequest();
-    var url = "https://itunes.apple.com/search?term=audioslave&entity=album";
+    var url = "https://itunes.apple.com/search?term="+ artist +"&entity=album";
     var method = "GET";
     var container = document.querySelector("#album_list_container");
     container.innerHTML = "";
@@ -30,7 +30,8 @@
           showArtist(JSON.parse(http.response));
 
 
-      }else if(http.status === XMLHttpRequest.DONE && http.status !== 200){
+      }else if(http.readyState === XMLHttpRequest.DONE && http.status !== 200){
+
         // something failed
       }
 
@@ -41,20 +42,26 @@
 
     var container = document.querySelector("#album_list_container");
     var template = "";
+    console.log(obj.results[0]);
+
+
 
     if(obj.results.length > 0){
+
+      document.querySelector('#not_match').style.display='none';
+
       for(var i=0; i< obj.results.length; i++){
 
         template += '<div class="col-sm-3 album_item">';
-        template += '<div class="item_thumbnail" style="background: url()"></div>';
-        template += '<div class="item_title">I can destroy</div>';
-        template += '<div class="item_price"><span>Price:</span> 200 USD</div>';
-        template += '<a href="#" target="_blank">Buy Now</a>';
+        template += '<div class="item_thumbnail" style="background: url('+ obj.results[i].artworkUrl100 +')"></div>';
+        template += '<div class="item_title">'+ obj.results[i].collectionName +'</div>';
+        template += '<div class="item_price"><span>Price:</span>'+ obj.results[i].collectionPrice +'</div>';
+        template += '<a href="'+obj.results[i].collectionViewUrl+'" target="_blank">Buy Now</a>';
         template += '</div>';
       }
 
-      container.innerHTML = '';
-      container.innerAdjacentHTML('afterbegin',template);
+      container.innerHTML = "";
+      container.insertAdjacentHTML('afterbegin', template);
 
     }else{
       // error message
